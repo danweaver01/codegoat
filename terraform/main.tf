@@ -23,6 +23,7 @@ resource "aws_iam_account_password_policy" "strict" {
   #allow_users_to_change_password = true
   max_password_age = 365
   #password_reuse_prevention      = 12
+  password_reuse_prevention = 24
 }
 
 module "vpc" {
@@ -69,4 +70,5 @@ module "instance" {
 resource "aws_ebs_volume" "i" {
   availability_zone = "${var.region}a"
   size              = 40
+  encrypted = true
 }
