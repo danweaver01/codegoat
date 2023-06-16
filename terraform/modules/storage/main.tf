@@ -4,6 +4,8 @@ resource "aws_db_subnet_group" "example_rds_subnet_grp" {
 
   tags = merge(var.default_tags, {
     Name = "example_rds_subnet_grp_${var.environment}"
+    }, {
+    yor_trace = "899b3f28-f9d5-439f-bcdf-e6e72e22d951"
   })
 }
 
@@ -13,6 +15,8 @@ resource "aws_security_group" "example_rds_sg" {
 
   tags = merge(var.default_tags, {
     Name = "example_rds_sg_${var.environment}"
+    }, {
+    yor_trace = "9accc707-792c-4361-9c1c-ce64520b7b1f"
   })
 
   ingress {
@@ -37,6 +41,8 @@ resource "aws_kms_key" "example_db_kms_key" {
 
   tags = merge(var.default_tags, {
     Name = "example_db_kms_key_${var.environment}"
+    }, {
+    yor_trace = "1f85fff0-5159-40a4-86bf-d8f479f5db40"
   })
 }
 
@@ -58,6 +64,8 @@ resource "aws_db_instance" "example_db" {
   kms_key_id                = aws_kms_key.example_db_kms_key.arn
   tags = merge(var.default_tags, {
     Name = "example_db_${var.environment}"
+    }, {
+    yor_trace = "24872565-fdd5-4aa4-ac58-5e2e878ee464"
   })
 }
 
@@ -67,7 +75,9 @@ resource "aws_ssm_parameter" "example_ssm_db_host" {
   type        = "String"
   value       = aws_db_instance.example_db.endpoint
 
-  tags = merge(var.default_tags, {})
+  tags = merge(var.default_tags, {}, {
+    yor_trace = "680ca957-fe7b-4864-9751-89e271d31209"
+  })
 }
 
 resource "aws_ssm_parameter" "example_ssm_db_password" {
@@ -76,7 +86,9 @@ resource "aws_ssm_parameter" "example_ssm_db_password" {
   type        = "String"
   value       = aws_db_instance.example_db.password
 
-  tags = merge(var.default_tags, {})
+  tags = merge(var.default_tags, {}, {
+    yor_trace = "77680218-5e1a-427c-8625-67c41bf60793"
+  })
 }
 
 resource "aws_ssm_parameter" "example_ssm_db_user" {
@@ -85,7 +97,9 @@ resource "aws_ssm_parameter" "example_ssm_db_user" {
   type        = "String"
   value       = aws_db_instance.example_db.username
 
-  tags = merge(var.default_tags, {})
+  tags = merge(var.default_tags, {}, {
+    yor_trace = "3a4620c7-04fb-40a7-aa17-bd0c1f5673fd"
+  })
 }
 resource "aws_ssm_parameter" "example_ssm_db_name" {
   name        = "/example-${var.environment}/DB_NAME"
@@ -95,6 +109,8 @@ resource "aws_ssm_parameter" "example_ssm_db_name" {
 
   tags = merge(var.default_tags, {
     environment = "${var.environment}"
+    }, {
+    yor_trace = "98e5d1b2-5db3-4b97-8c06-a655342b6513"
   })
 }
 
@@ -103,23 +119,27 @@ resource "aws_s3_bucket" "my-private-bucket" {
 
   tags = merge(var.default_tags, {
     name = "example_private_${var.environment}"
+    }, {
+    yor_trace = "14df61a8-ed84-4a54-bfed-1a6361b3db6e"
   })
 }
 
 resource "aws_s3_bucket" "public-bucket-oops" {
   bucket = "my-public-bucket-oops-demo"
-  
+
   tags = merge(var.default_tags, {
     name = "example_public_${var.environment}"
+    }, {
+    yor_trace = "559891b5-95f9-4f71-b409-f2baf87655d7"
   })
 }
 
 resource "aws_s3_bucket_public_access_block" "private_access" {
   bucket = aws_s3_bucket.my-private-bucket.id
 
-  ignore_public_acls  = true
-  block_public_acls   = true
-  block_public_policy = true
+  ignore_public_acls      = true
+  block_public_acls       = true
+  block_public_policy     = true
   restrict_public_buckets = true
 }
 
@@ -127,9 +147,9 @@ resource "aws_s3_bucket_public_access_block" "private_access" {
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.public-bucket-oops.id
 
-  ignore_public_acls = var.public_var
-  block_public_acls   = var.public_var
-  block_public_policy = var.public_var
+  ignore_public_acls      = var.public_var
+  block_public_acls       = var.public_var
+  block_public_policy     = var.public_var
   restrict_public_buckets = var.public_var
 }
 

@@ -1,5 +1,8 @@
 resource "aws_vpc" "example" {
   cidr_block = var.cidr
+  tags = {
+    yor_trace = "ef1a6880-cc70-4f27-a5e3-c04d7c8a166f"
+  }
 }
 
 resource "aws_default_security_group" "default" {
@@ -10,6 +13,9 @@ resource "aws_default_security_group" "default" {
     self      = true
     from_port = 0
     to_port   = 0
+  }
+  tags = {
+    yor_trace = "a0301bc8-3617-4b78-876a-1a2f350e0fb4"
   }
 }
 
@@ -24,6 +30,9 @@ resource "aws_security_group" "allow_all_ssh" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    yor_trace = "97b8abf8-de8b-40cd-b309-3a86aff1f254"
+  }
 }
 
 resource "aws_security_group" "allow_ssh_from_valid_cidr" {
@@ -35,6 +44,9 @@ resource "aws_security_group" "allow_ssh_from_valid_cidr" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = tolist([ var.cidr ])
+    cidr_blocks = tolist([var.cidr])
+  }
+  tags = {
+    yor_trace = "d8ecdb38-9b61-4f3a-ac9e-f040a0831989"
   }
 }
